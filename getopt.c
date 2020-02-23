@@ -3,45 +3,73 @@
  * @created     : Thursday Feb 20, 2020 01:17:33 HKT
  */
 
+/* from: https://blog.csdn.net/qq_22863733/article/details/80173793 */
+
 #include <unistd.h>
-#include <stdlib.h>
 #include <stdio.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char * argv[])
 {
-	int flags, opt;
-	int nsecs, tfnd;
+	int i;
+	int ch;
+	const char *optstr = ":ab:c:de::";
+	printf("--------------------------\n");
+	for (i = 0; i < argc; i++)
+	{
+		printf("%s\n", argv[i]);
+	}
+	printf("--------------------------\n");
 
-	nsecs = 0;
-	tfnd = 0;
-	flags = 0;
-	while ((opt = getopt(argc, argv, "nt:")) != -1) {
-		switch (opt) {
-		case 'n':
-			flags = 1;
+	printf("\n\n");
+	printf("optstr:'%s', optind:%d，opterr：%d\n", optstr, optind, opterr);
+	printf("--------------------------\n");
+	while ((ch = getopt(argc, argv, optstr)) != -1)
+	{
+		printf("optind: %d\n", optind);
+		switch (ch)
+			{
+		case 'a':
+			printf("HAVE option: -a\n\n");
 			break;
-		case 't':
-			nsecs = atoi(optarg);
-			tfnd = 1;
+		case 'b':
+			printf("HAVE option: -b\n");
+			printf("The argument of -b is %s\n\n", optarg);
 			break;
-		default: /* '?' */
-			fprintf(stderr, "Usage: %s [-t nsecs] [-n] name\n",
-				argv[0]);
-			exit(EXIT_FAILURE);
+		case 'c':
+			printf("HAVE option: -c\n");
+			printf("The argument of -c is %s\n\n", optarg);
+			break;
+		case 'd':
+			printf("HAVE option: -d\n");
+			break;
+		case 'e':
+			printf("HAVE option: -e\n");
+			printf("The argument of -e is %s\n\n", optarg);
+			break;
+		case ':':
+			printf("Unknown option(:): %c\n", (char)optopt);
+			break;
+
+		case '?':
+			printf("Unknown option(?): %c\n", (char)optopt);
+			break;
 		}
+
+		printf("-----\n");
+		printf("optarg:%s\n", optarg);
+		printf("optopt:%c\n", optopt);
+		printf("----------------------------\n");
 	}
 
-	printf("flags=%d; tfnd=%d; nsecs=%d; optind=%d\n",
-	       flags, tfnd, nsecs, optind);
+	printf("----------------------------\n");
+	printf("optind=%d, argv[%d]=%s\n", optind, optind, argv[optind]);
 
-	if (optind >= argc) {
-		fprintf(stderr, "Expected argument after options\n");
-		exit(EXIT_FAILURE);
+	printf("--------------------------\n");
+	for (i = 0; i < argc; i++)
+	{
+		printf("%s\n", argv[i]);
 	}
+	printf("--------------------------\n");
 
-	printf("name argument = %s\n", argv[optind]);
-
-	/* Other code omitted */
-
-	exit(EXIT_SUCCESS);
+	return 0;
 }
